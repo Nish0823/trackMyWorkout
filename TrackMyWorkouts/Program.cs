@@ -16,10 +16,11 @@ namespace TrackMyWorkouts
 
           
             builder.Services.AddDbContext<ApplicationDbContext>(options => 
-                options.UseSqlServer(builder.Configuration["ConnectionStrings:DefaultConnection"])
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
                 .EnableSensitiveDataLogging(true));
 
-          
+
+
             builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
               .AddEntityFrameworkStores<ApplicationDbContext>()
               .AddDefaultTokenProviders();

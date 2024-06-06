@@ -1,0 +1,38 @@
+﻿@page "/workoutlog"
+
+<h3>LogWorkouts</h3>
+
+<div>
+    <span class="material-symbols-outlined" @onclick="GoBackADay">
+        arrow_back
+    </span>
+    <span>@currentDate.ToShortDateString()</span>
+    @if(currentDate.Date != DateTime.Now.Date)
+    {
+        <span class="material-symbols-outlined" @onclick="GoForwardADay">
+            arrow_forward
+        </span>
+    }
+</div>
+
+
+
+
+<select @onchange="@AddWorkout">
+    <option value="" disabled selected>Select an exercise</option>
+    @{
+
+        foreach (var item in exerciseList)
+        {
+            <option value="@item.Id">@item.Name</option>
+        }
+    }
+</select>
+
+
+<div>
+    @foreach (var viewModel in vmList)
+    {
+        <Workouts WorkOutViewModel="viewModel" OnEventOccurred="HandleCallBack"/>
+    }
+</div>

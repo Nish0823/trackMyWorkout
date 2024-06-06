@@ -1,0 +1,60 @@
+﻿
+@if (WorkOutViewModel != null)
+{
+    <div class="col-12 mb-3">
+        <div class="border border-secondary p-3">
+        <h2>@WorkOutViewModel.ExerciseName</h2>
+        <table class="table">
+            @if(WorkOutViewModel.SetLogs.Any())
+            {
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Reps</th>
+                        <th>Weight</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+            } 
+            <tbody>
+                
+                    @foreach (var set in WorkOutViewModel.SetLogs)
+                    {
+                        <tr>
+                            <td class="fw-bold">Set</td>
+                            <td>
+                                <input size="4" @bind="set.Reps"  class="form-control" readonly="@set.IsReadOnly" />
+                            </td>
+                            <td>
+                            <input size="4" @bind="@set.Weight" class="form-control" readonly="@set.IsReadOnly" />
+                            </td>
+                            <td>
+                                <a href="javascript:;" class="edit-action" @onclick="(e) => EditActionClicked(set)">
+                                    <span class="material-symbols-outlined">
+                                        edit
+                                    </span>
+                                </a>
+                                <a href="javascript:;" @onclick="(e) => DeleteSet(set.SetLogId)">
+                                    <span class="material-symbols-outlined">
+                                        delete
+                                    </span>
+                                </a>
+                                <a href="javascript:;" @onclick="(e) => SaveSet(set)">
+                                    <span class="material-symbols-outlined">
+                                        save    
+                                    </span>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+            </tbody>
+        </table>
+        <NotificationBanner Message="Set logged successfully" ShowNotification="@showNotification"></NotificationBanner>
+        <button class="btn-primary" @onclick="AddSet">Add Set</button>
+        </div>
+    </div>
+}
+
+
+
+

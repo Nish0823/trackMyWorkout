@@ -1,0 +1,7 @@
+﻿@if (ShowNotification)
+{
+        <div class="alert alert-info alert-dismissible fade show" role="alert">
+        @Message
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" @onclick="DismissNotification"></button>
+        </div>
+}

@@ -1,0 +1,18 @@
+﻿@using System.Net.Http
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Components.Routing
+@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.AspNetCore.Components.Web.Virtualization
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.JSInterop
+@using TrackMyWorkouts
+@using TrackMyWorkouts.Data.DataModels
+@using TrackMyWorkouts.Shared
+@using TrackMyWorkouts.Components
+
+
+@inject NavigationManager Navigation
+@inject SignInManager<ApplicationUser> SignInManager
+@inject AuthenticationStateProvider AuthenticationStateProvider

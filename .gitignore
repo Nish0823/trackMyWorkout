@@ -362,3 +362,5 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 /TrackMyWorkouts/Properties/launchSettings.json
+/TrackMyWorkouts/appsettings.json
+/TrackMyWorkouts/appsettings.Development.json

@@ -10,9 +10,6 @@ namespace TrackMyWorkouts.Pages
         [Inject]
         private IExercise exerciseService {  get; set; }
 
-        [Inject]
-        private  IEmailService EmailService { get; set; }
-
         //private properties
         private bool showNotification = false;
         private string exerciseName;
@@ -51,7 +48,6 @@ namespace TrackMyWorkouts.Pages
                 return;
             }
 
-            await EmailService.SendEmailAsync("nshntshr@gmail.com", "whats up bboy", "yoyoyo");
             var newExercise =  await exerciseService.CreateExercise(exerciseName);
 
             notificationMessage = $"{newExercise.Name} successfully created";

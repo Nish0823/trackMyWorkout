@@ -36,8 +36,6 @@ namespace TrackMyWorkouts.Services.Implementations
                 var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                 var confirmationLink = $"{hostUrl}/confirmemail?userId={user.Id}&token={token}";
 
-                // Send the email with the confirmation link
-
                 await _emailService.SendEmailAsync(user.Email, "register", confirmationLink);
             }
         }

@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Hosting.StaticWebAssets;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using TrackMyWorkouts.Configurations;
 using TrackMyWorkouts.Data;
 using TrackMyWorkouts.Data.DataModels;
 using TrackMyWorkouts.Services.Implementations;
@@ -25,6 +27,11 @@ namespace TrackMyWorkouts
               .AddEntityFrameworkStores<ApplicationDbContext>()
               .AddDefaultTokenProviders();
 
+            builder.Services.Configure<IdentityOptions>(options =>
+            {
+                options.User.RequireUniqueEmail = true;
+            });
+
             builder.Services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = "Identity.Application";
@@ -34,7 +41,8 @@ namespace TrackMyWorkouts
             builder.Services.AddAuthorization();
 
             builder.Services.AddCascadingAuthenticationState();
-
+          
+            builder.Services.Configure<HostUrlSettings>(builder.Configuration.GetSection("HostUrlSettings")); 
             // Add services to the container.
             builder.Services.AddRazorPages();
             builder.Services.AddServerSideBlazor();
@@ -42,7 +50,7 @@ namespace TrackMyWorkouts
             builder.Services.AddScoped<SignInManager<ApplicationUser>>();
             builder.Services.AddScoped<UserManager<ApplicationUser>>();
             builder.Services.AddTransient<IEmailService, EmailService>();
-
+            builder.Services.AddTransient<IRegistrationService, RegistrationService>();
 
 
             //application services

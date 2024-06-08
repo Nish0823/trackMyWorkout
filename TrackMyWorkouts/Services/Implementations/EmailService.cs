@@ -19,7 +19,7 @@ namespace TrackMyWorkouts.Services.Implementations
         public async Task SendEmailAsync(string toEmail, string subject, string message)
         {
    
-            var htmlContent = $"<html><body><h1>Quick send email test</h1><br/><h4>This email message is sent from track  my workout.</h4><p>{message} I am the best!!</p></body></html>";
+            var htmlContent = $"<html><body><h1>Quick send email test</h1><br/><h4>This email message is sent from track  my workout.</h4><a href={message}>Confirm Your Email</a></body></html>";
          
             //var emailContent = new EmailContent(subject: subject);
             //emailContent.PlainText = message;

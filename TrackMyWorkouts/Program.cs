@@ -25,6 +25,14 @@ namespace TrackMyWorkouts
               .AddEntityFrameworkStores<ApplicationDbContext>()
               .AddDefaultTokenProviders();
 
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = "Identity.Application";
+                options.DefaultChallengeScheme = "Identity.Application";
+            });
+
+            builder.Services.AddAuthorization();
+
             builder.Services.AddCascadingAuthenticationState();
 
             // Add services to the container.

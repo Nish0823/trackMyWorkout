@@ -10,18 +10,17 @@ namespace TrackMyWorkouts.Services.Implementations
     {
 
         private readonly IEmailService _emailService;
-        private readonly UserManager<ApplicationUser> _userManager; 
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly HostUrlSettings _hostUrlSettings;
 
         private string hostUrl;
-        public RegistrationService(IEmailService emailService, UserManager<ApplicationUser> userManager, IWebHostEnvironment webHostEnvironment, IOptions<HostUrlSettings> hostUrlSettings) 
+        public RegistrationService(IEmailService emailService, UserManager<ApplicationUser> userManager, IWebHostEnvironment webHostEnvironment, IOptions<HostUrlSettings> hostUrlSettings)
         {
             _emailService = emailService;
             _userManager = userManager;
             _webHostEnvironment = webHostEnvironment;
             _hostUrlSettings = hostUrlSettings.Value;
-        
         }
 
 
@@ -30,12 +29,11 @@ namespace TrackMyWorkouts.Services.Implementations
             var user = new ApplicationUser { UserName = email, Email = email };
             var result = await CreateUser(user, passWord);
 
-            if (result.Succeeded) 
+            if (result.Succeeded)
             {
                 SetHostUrl();
                 var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                var confirmationLink = $"{hostUrl}/confirmemail?userId={user.Id}&token={token}";
-
+                var confirmationLink = $"{hostUrl}/accounts/confirmemail?userId={user.Id}&token={token}";
                 await _emailService.SendEmailAsync(user.Email, "register", confirmationLink);
             }
         }
@@ -45,9 +43,9 @@ namespace TrackMyWorkouts.Services.Implementations
             throw new NotImplementedException();
         }
 
-        private void SetHostUrl() 
+        private void SetHostUrl()
         {
-            if(_webHostEnvironment.IsDevelopment()) 
+            if (_webHostEnvironment.IsDevelopment())
             {
                 hostUrl = _hostUrlSettings.DevelopmentHostUrl;
             }
@@ -60,9 +58,19 @@ namespace TrackMyWorkouts.Services.Implementations
 
         private async Task<IdentityResult> CreateUser(ApplicationUser user, string passWord)
         {
-            
             var result = await _userManager.CreateAsync(user, passWord);
             return result;
+        }
+
+        public async Task ValidateToken(string userId, string token)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+
+            if(user != null)
+            {
+                await _userManager.ConfirmEmailAsync(user, token);
+            }
+          
         }
     }
 }

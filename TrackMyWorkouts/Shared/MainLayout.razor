@@ -1,5 +1,4 @@
-﻿
-@inherits LayoutComponentBase
+﻿@inherits LayoutComponentBase
 
 
 <PageTitle>TrackMyWorkouts</PageTitle>
@@ -10,16 +9,16 @@
     </div>
 
     <main>
-        <div class="top-row px-4">        
-                <AuthorizeView>
-                    <Authorized>
-                        <NavLink href="/logout">Logout</NavLink>
-                    </Authorized>
-                    <NotAuthorized>
-                        <NavLink href="/login">Login</NavLink>
-                        <NavLink href="/register">Register</NavLink>
-                    </NotAuthorized>
-                </AuthorizeView>
+        <div class="top-row px-4">
+            <AuthorizeView>
+                <Authorized>
+                    <NavLink href="/logout">Logout</NavLink>
+                </Authorized>
+                <NotAuthorized>
+                    <NavLink href="/identity/account/login">Login</NavLink>
+                    <NavLink href="/accounts/register">Register</NavLink>
+                </NotAuthorized>
+            </AuthorizeView>
             <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
         </div>
 

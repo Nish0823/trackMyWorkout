@@ -1,8 +1,9 @@
 ﻿@page "/create"
 
+
 <NotificationBanner ShowNotification="@showNotification" Message="@notificationMessage" />
 <div class="text-center">
-    <label class="form-label">Name</label>
+    <label class="form-label" >Name</label>
     <input class="form-control" @oninput= "HandleInputChange" value="@exerciseName" type="text" />
     <div class="text-danger" style="display: @display">
         Required field.

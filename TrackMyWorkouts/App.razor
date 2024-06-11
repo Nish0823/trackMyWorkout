@@ -1,11 +1,11 @@
-﻿@using TrackMyWorkouts.Pages
-
+﻿
 <Router AppAssembly="@typeof(App).Assembly">
     <Found Context="routeData">
         <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
             <NotAuthorized>
                 @{
-                    Navigation.NavigateTo("/login", true);
+                    
+                    Navigation.NavigateTo("/identity/account/login", true);
                 }
             </NotAuthorized>
         </AuthorizeRouteView>
@@ -21,3 +21,11 @@
 
 
 
+@* @if (!context.User.Identity.IsAuthenticated)
+                    {
+                        <RedirectToLogin />
+                    }
+                    else
+                    {
+                        <p>You are not authorized to access this resource.</p>
+                    } *@

@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Hosting.StaticWebAssets;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -5,6 +6,8 @@ using Microsoft.Extensions.Configuration;
 using TrackMyWorkouts.Configurations;
 using TrackMyWorkouts.Data;
 using TrackMyWorkouts.Data.DataModels;
+using TrackMyWorkouts.Pages;
+using TrackMyWorkouts.Pages.Accounts;
 using TrackMyWorkouts.Services.Implementations;
 using TrackMyWorkouts.Services.Interfaces;
 
@@ -23,9 +26,10 @@ namespace TrackMyWorkouts
 
 
 
-            builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options => options.SignIn.RequireConfirmedEmail = true)
               .AddEntityFrameworkStores<ApplicationDbContext>()
               .AddDefaultTokenProviders();
+
 
             builder.Services.Configure<IdentityOptions>(options =>
             {
@@ -36,16 +40,26 @@ namespace TrackMyWorkouts
             {
                 options.DefaultAuthenticateScheme = "Identity.Application";
                 options.DefaultChallengeScheme = "Identity.Application";
+               
             });
 
             builder.Services.AddAuthorization();
+            builder.Services.AddRazorComponents();
 
-            builder.Services.AddCascadingAuthenticationState();
-          
+            builder.Services.ConfigureApplicationCookie(options =>
+            {
+                //cookie expiration and sliding exp has default values of 14 and true respectively
+                options.Cookie.HttpOnly = true;
+            });
+
+
+
+
             builder.Services.Configure<HostUrlSettings>(builder.Configuration.GetSection("HostUrlSettings")); 
             // Add services to the container.
             builder.Services.AddRazorPages();
             builder.Services.AddServerSideBlazor();
+            builder.Services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<ApplicationUser>>();
             builder.Services.AddScoped<ApplicationDbContext>();
             builder.Services.AddScoped<SignInManager<ApplicationUser>>();
             builder.Services.AddScoped<UserManager<ApplicationUser>>();
@@ -55,6 +69,8 @@ namespace TrackMyWorkouts
 
             //application services
             builder.Services.AddScoped<IExercise, Exercise>();
+
+            builder.Services.AddCascadingAuthenticationState();
 
             var app = builder.Build();
 
@@ -85,10 +101,14 @@ namespace TrackMyWorkouts
             }
 
             app.UseHttpsRedirection();
-
             app.UseStaticFiles();
-
             app.UseRouting();
+
+            //app.UseCors(x => x
+            //.AllowAnyOrigin()
+            //.AllowAnyMethod()
+            //.AllowAnyHeader());
+
             app.UseAuthentication();
             app.UseAuthorization();
 

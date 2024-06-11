@@ -5,5 +5,6 @@
         Task SendConfirmationEmail(string toEmail, string token);
 
         Task RegisterUser(string email, string passWord);
+        Task ValidateToken(string userId, string token);
     }
 }

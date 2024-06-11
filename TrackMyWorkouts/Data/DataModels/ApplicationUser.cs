@@ -6,5 +6,7 @@ namespace TrackMyWorkouts.Data.DataModels
     {
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
+
+        public virtual ICollection<ExerciseCarriedOut > ExercisesCarriedOut { get;}
     }
 }

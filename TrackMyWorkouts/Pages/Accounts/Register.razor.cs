@@ -1,25 +1,22 @@
 ﻿
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Hosting;
-using TrackMyWorkouts.Data.DataModels;
 using TrackMyWorkouts.Services.Interfaces;
 using TrackMyWorkouts.ViewModels.AccountsViewModels;
 
-namespace TrackMyWorkouts.Pages
+namespace TrackMyWorkouts.Pages.Accounts
 {
     public partial class Register
     {
 
         [Inject]
-        private IRegistrationService registrationService {  get; set; }  
+        private IRegistrationService registrationService { get; set; }
 
-        private RegisterViewModel registerModel = new RegisterViewModel();
+        private RegisterViewModel registerModel = new();
 
         private async Task HandleRegistration()
         {
             await registrationService.RegisterUser(registerModel.Email, registerModel.Password);
-           
+
 
             //string hostUrl;
             //if (webHostEnvironment.IsDevelopment()) // Assuming development uses localhost

@@ -23,9 +23,9 @@ namespace TrackMyWorkouts.Services.Implementations
             return newExercise;
         }
 
-        public async Task<ExerciseCarriedOut> CreateNewLog(int exTypeId, DateTime currentDate)
+        public async Task<ExerciseCarriedOut> CreateNewLog(int exTypeId, DateTime currentDate, string appUserId)
         {
-            var newExerciseCarriedOut = new ExerciseCarriedOut() { ExerciseDate = currentDate };
+            var newExerciseCarriedOut = new ExerciseCarriedOut() { ExerciseDate = currentDate, ApplicationUserId = appUserId };
             await _applicationDbContext.ExerciseCarriedOut.AddAsync(newExerciseCarriedOut);
             await _applicationDbContext.SaveChangesAsync();
             await CreateNewExTypeCarriedOut(newExerciseCarriedOut.Id, exTypeId);
@@ -48,12 +48,12 @@ namespace TrackMyWorkouts.Services.Implementations
             return exerciseCarriedOut.SetLogs.ToList();
         }
 
-        public async Task<IEnumerable<ExerciseTypeCarriedOut>> GetExercisesForThisDate(DateTime utcNow)
+        public async Task<IEnumerable<ExerciseTypeCarriedOut>> GetUsersExercisesForThisDate(DateTime utcNow, string appUserId)
         {
             DateTime searchDate = utcNow.Date;
             var exercises = await _applicationDbContext.ExerciseCarriedOut
                                                 .AsNoTracking()
-                                                .Where(e => e.ExerciseDate == searchDate).ToListAsync();
+                                                .Where(e => e.ExerciseDate == searchDate && e.ApplicationUserId == appUserId).ToListAsync();
                                                 
             var exTypeCarriedOutList = new List<ExerciseTypeCarriedOut>();
 
@@ -84,11 +84,11 @@ namespace TrackMyWorkouts.Services.Implementations
             await _applicationDbContext.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<WorkoutLogViewModel>> WorkoutLogViewModelsList(DateTime date)
+        public async Task<IEnumerable<WorkoutLogViewModel>> WorkoutLogViewModelsList(DateTime date, string appUserId)
         {
             List<WorkoutLogViewModel> workoutLogViewModels = new List<WorkoutLogViewModel>();
 
-            var exTypeCarriedOut = await GetExercisesForThisDate(date);
+            var exTypeCarriedOut = await GetUsersExercisesForThisDate(date, appUserId);
 
             foreach (var workOutLog in exTypeCarriedOut)
             {

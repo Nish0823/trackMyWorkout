@@ -5,7 +5,7 @@ using TrackMyWorkouts.Services.Interfaces;
 
 namespace TrackMyWorkouts.Pages
 {
-    
+    [Authorize]
     public partial class Create
     {
         [Inject]
@@ -18,20 +18,37 @@ namespace TrackMyWorkouts.Pages
         private bool isButtonDisabled = false;
         private string notificationMessage;
 
-        [Inject]
-        private AuthenticationStateProvider authenticationStateProvider { get; set; }
+        [CascadingParameter]
+        private Task<AuthenticationState>? authenticationState { get; set; }
 
-        protected override async Task OnInitializedAsync()
+        protected override async void OnInitialized()
         {
-            var ap  = await authenticationStateProvider.GetAuthenticationStateAsync();
-
-            Console.WriteLine(ap);
+            if(authenticationState != null)
+            {
+                var authState = await authenticationState;
+                var user = authState?.User;
+                if (!user.Identity.IsAuthenticated)
+                {
+                    Console.WriteLine("noy authenticated");
+                }
+                else if (user.Identity.IsAuthenticated)
+                {
+                    Console.WriteLine("authenticated");
+                }
+            }
+            
         }
         private void HandleInputChange(ChangeEventArgs e)
         {
             exerciseName = e.Value.ToString();
             UpdateDisplay();
            
+        }
+
+        protected override void OnParametersSet()
+        {
+            Console.WriteLine("called");
+            base.OnParametersSet();
         }
 
         private void UpdateDisplay()

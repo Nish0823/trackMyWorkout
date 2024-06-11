@@ -1,5 +1,5 @@
 ﻿@inherits LayoutComponentBase
-
+@inject SignInManager<ApplicationUser> signInManager; 
 
 <PageTitle>TrackMyWorkouts</PageTitle>
 
@@ -12,7 +12,12 @@
         <div class="top-row px-4">
             <AuthorizeView>
                 <Authorized>
-                    <NavLink href="/logout">Logout</NavLink>
+                    <a href="Identity/Account/Manage">Hello, @context.User.Identity.Name!</a>
+                    <NavLink href="/identity/account/logout">Logout</NavLink>
+                @*     <form method="post" action="/identity/account/logout">
+                        <button type="submit" class="nav-link btn btn-link">Log out</button>
+                    </form> *@
+                   @*  <NavLink href="/logout" @onclick="SignOutUser">Logout</NavLink> *@
                 </Authorized>
                 <NotAuthorized>
                     <NavLink href="/identity/account/login">Login</NavLink>
@@ -27,3 +32,4 @@
         </article>
     </main>
 </div>
+

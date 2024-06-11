@@ -48,10 +48,8 @@ namespace TrackMyWorkouts
 
             builder.Services.ConfigureApplicationCookie(options =>
             {
+                //cookie expiration and sliding exp has default values of 14 and true respectively
                 options.Cookie.HttpOnly = true;
-                options.LoginPath = "/accounts/login";
-                options.LogoutPath = "/accounts/logout";
-                options.SlidingExpiration = true;
             });
 
 
@@ -61,7 +59,7 @@ namespace TrackMyWorkouts
             // Add services to the container.
             builder.Services.AddRazorPages();
             builder.Services.AddServerSideBlazor();
-            //builder.Services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<ApplicationUser>>();
+            builder.Services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<ApplicationUser>>();
             builder.Services.AddScoped<ApplicationDbContext>();
             builder.Services.AddScoped<SignInManager<ApplicationUser>>();
             builder.Services.AddScoped<UserManager<ApplicationUser>>();

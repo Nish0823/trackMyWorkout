@@ -165,5 +165,28 @@ namespace TrackMyWorkouts.Services.Implementations
         {
             return await _applicationDbContext.SetLogs.FindAsync(setLogId);
         }
+
+        public async Task<IEnumerable<ExerciseCarriedOut>> GetUsersExerciseHistory(int exTypeId, string appUserId)
+        {
+            var exerciseCarriedOut = new List<ExerciseCarriedOut>();
+            var exerciseTypeCarriedOut = await _applicationDbContext.ExerciseTypeCarriedOut.Where(ex => ex.ExerciseTypeId == exTypeId).ToListAsync();
+
+            var usersEvercises = _applicationDbContext.ExerciseCarriedOut
+                .AsNoTracking()
+                .Include(e => e.SetLogs)
+                .Where(e => e.ApplicationUserId == appUserId)
+                .OrderByDescending(e => e.ExerciseDate)
+                .ToDictionary(e => e.Id, e => e);
+
+            foreach(var ex in exerciseTypeCarriedOut)
+            {
+                if(usersEvercises.TryGetValue(ex.ExerciseCarriedOutId, out ExerciseCarriedOut value))
+                {
+                    exerciseCarriedOut.Add(value);
+                }
+            }
+
+            return exerciseCarriedOut;
+        }
     }
 }

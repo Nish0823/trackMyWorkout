@@ -1,0 +1,30 @@
+﻿@page "/history"
+
+
+<select @onchange="GetExerciseHistory">
+    <option value="" disabled selected>Select an exercise</option>
+    @{
+
+        foreach (var item in exerciseList)
+        {
+            <option value="@item.Id">@item.Name</option>
+        }
+    }
+</select>
+
+
+@if(vmList != null)
+{
+    <div>
+        @foreach (var viewModel in vmList)
+        {
+            <h1>@viewModel.Date.ToString("dd/MM/yyyy")</h1>
+            @foreach (var set in viewModel.Log)
+            {
+                <h4>@set.Reps</h4>
+                <h4>@set.Weight</h4>
+            }
+            <br />
+        }
+    </div>
+}

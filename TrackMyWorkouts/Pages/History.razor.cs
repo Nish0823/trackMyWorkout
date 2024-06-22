@@ -18,7 +18,7 @@ namespace TrackMyWorkouts.Pages
 
 
         private IEnumerable<ExerciseType> exerciseList = new List<ExerciseType>();
-        private IEnumerable<ExerciseHistoryViewModel> vmList;
+        private IEnumerable<ExerciseHistoryViewModel> vmList = new List<ExerciseHistoryViewModel>();
         private string appUserId;
 
         protected override async Task OnInitializedAsync()

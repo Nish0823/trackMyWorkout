@@ -14,6 +14,6 @@ namespace TrackMyWorkouts.Data.DataModels
 
 
         public int ExerciseCarriedOutId { get; set; }
-        public ExerciseCarriedOut ExerciseCarriedOut { get; set; }
+        public ExerciseCarriedOut ExercisesCarriedOut { get; set; } = null!;
     }
 }

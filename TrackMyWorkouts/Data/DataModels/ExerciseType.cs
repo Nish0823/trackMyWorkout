@@ -13,8 +13,5 @@
             Name = name;
         }
 
-
-
-        public virtual ICollection<ExerciseTypeCarriedOut> ExercisesCarriedOut { get; set; }
     }
 }

@@ -11,10 +11,13 @@ namespace TrackMyWorkouts.Data.DataModels
         public DateTime ExerciseDate { get; set; }
 
         [Required]
-        public string ApplicationUserId { get; set; }
+        public string ApplicationUserId { get; set; } = null!;
 
-        public virtual ApplicationUser ApplicationUser { get; set; }
-        public virtual ICollection<ExerciseTypeCarriedOut> ExerciseTypesCarriedOut { get; set; }
-        public virtual ICollection<SetLog> SetLogs { get; set; } 
+        public int? ExerciseTypeId { get; set; }
+
+
+        public virtual ExerciseType ExerciseType { get; set; } = null!;
+        public virtual ApplicationUser ApplicationUser { get; set; } = null!;
+        public virtual ICollection<SetLog> SetLogs { get; set; } = null!;
     }
 }

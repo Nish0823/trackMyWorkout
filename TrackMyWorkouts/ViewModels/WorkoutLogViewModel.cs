@@ -6,7 +6,7 @@ namespace TrackMyWorkouts.ViewModels
     {
         public int ExerciseCarriedOutId { get; set; }
         public IEnumerable<SetLogViewModel> SetLogs { get; set; }
-        public string ExerciseName { get; set; }
+        public string ExerciseName { get; set; } = null!;
         public int ExerciseTypeId { get; internal set; }
     }
 }

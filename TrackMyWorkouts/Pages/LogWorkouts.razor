@@ -22,9 +22,9 @@
     <option value="" disabled selected>Select an exercise</option>
     @{
 
-        foreach (var item in exerciseList)
+        foreach (var type in exerciseType)
         {
-            <option value="@item.Id">@item.Name</option>
+            <option value="@type.Id">@type.Name</option>
         }
     }
 </select>

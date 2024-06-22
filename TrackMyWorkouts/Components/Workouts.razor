@@ -3,7 +3,18 @@
 {
     <div class="col-12 mb-3">
         <div class="border border-secondary p-3">
-        <h2>@WorkOutViewModel.ExerciseName</h2>
+            <div class="d-flex align-items-center">
+                <div>
+                    <h2>@WorkOutViewModel.ExerciseName</h2>
+                </div>
+                <div class="ms-auto">
+                    <a href="javascript:;" @onclick="(e) => DeleteExercise(WorkOutViewModel.ExerciseCarriedOutId)">
+                        <span class="material-symbols-outlined">
+                            delete
+                        </span>
+                    </a>
+                </div>
+        </div>
         <table class="table">
             @if(WorkOutViewModel.SetLogs.Any())
             {

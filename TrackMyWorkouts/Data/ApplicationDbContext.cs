@@ -11,8 +11,6 @@ namespace TrackMyWorkouts.Data
         public DbSet<ExerciseType> ExerciseType { get; set; }
         public DbSet<ExerciseCarriedOut> ExerciseCarriedOut { get; set; }
 
-        public DbSet<ExerciseTypeCarriedOut> ExerciseTypeCarriedOut { get; set; }
-
         public DbSet<SetLog> SetLogs { get; set; }
     }
 }

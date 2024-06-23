@@ -17,7 +17,7 @@ namespace TrackMyWorkouts.Pages
         private Task<AuthenticationState>? authenticationState { get; set; }
 
         private DateTime currentDate;
-        private IEnumerable<ExerciseType> exerciseList = new List<ExerciseType>();
+        private IEnumerable<ExerciseType> exerciseType = new List<ExerciseType>();
         private IEnumerable<WorkoutLogViewModel> vmList = new List<WorkoutLogViewModel>();
         private string appUserId;
 
@@ -29,7 +29,7 @@ namespace TrackMyWorkouts.Pages
                 appUserId = authState.User.Identity.GetUserId();
             }
             currentDate = DateTime.Now;
-            exerciseList = await exerciseService.GetExercises();
+            exerciseType = await exerciseService.GetExercises();
             vmList = await exerciseService.WorkoutLogViewModelsList(currentDate, appUserId);
         }
 
@@ -49,6 +49,9 @@ namespace TrackMyWorkouts.Pages
                     break;
                 case "deleteSet":
                     await DeleteSetLog((int)eventData);
+                    break;
+                case "deleteExerciseCarriedOut":
+                    await DeleteExerciseCarriedOut((int)eventData);
                     break;
                 default:
                     break;
@@ -95,6 +98,12 @@ namespace TrackMyWorkouts.Pages
         private async Task DeleteSetLog(int setLogId)
         {
             await exerciseService.DeleteSetLog(setLogId);
+            vmList = await exerciseService.WorkoutLogViewModelsList(currentDate, appUserId);
+        }
+
+        private async Task DeleteExerciseCarriedOut(int exCarriedOutId)
+        {
+            await exerciseService.DeleteExerciseOut(exCarriedOutId);
             vmList = await exerciseService.WorkoutLogViewModelsList(currentDate, appUserId);
         }
     }

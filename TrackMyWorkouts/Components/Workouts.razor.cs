@@ -11,10 +11,6 @@ namespace TrackMyWorkouts.Components
      
         [Parameter]
         public WorkoutLogViewModel WorkOutViewModel { get; set; }
-        [Parameter]
-        public EventCallback<SetLogViewModel> OnSaveSet { get; set; }
-        [Parameter]
-        public EventCallback<int> OnAddSet { get; set; }
 
         [Parameter]
         public EventCallback<(string, object)> OnEventOccurred { get; set; }
@@ -43,6 +39,11 @@ namespace TrackMyWorkouts.Components
         private async Task DeleteSet(int setLogId)
         {
             await OnEventOccurred.InvokeAsync(("deleteSet", setLogId));
+        }
+
+        private async Task DeleteExercise(int exCarriedOutId)
+        {
+            await OnEventOccurred.InvokeAsync(("deleteExerciseCarriedOut", exCarriedOutId));
         }
     } 
 }

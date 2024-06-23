@@ -1,5 +1,43 @@
-﻿
-@if (WorkOutViewModel != null)
+﻿@page "/history"
+
+
+<select @onchange="GetExerciseHistory">
+    <option value="" disabled selected>Select an exercise</option>
+    @{
+
+        foreach (var item in exerciseList)
+        {
+            <option value="@item.Id">@item.Name</option>
+        }
+    }
+</select>
+
+
+<div>
+    @foreach (var viewModel in vmList)
+    {
+        <HistoryList HistoryViewModel="viewModel"  />
+    }
+</div>
+
+
+@* @if(vmList != null)
+{
+    <div>
+        @foreach (var viewModel in vmList)
+        {
+            <h1>@viewModel.Date.ToString("dd/MM/yyyy")</h1>
+            @foreach (var set in viewModel.Log)
+            {
+                <h4>@set.Reps</h4>
+                <h4>@set.Weight</h4>
+            }
+            <br />
+        }
+    </div>
+} *@
+
+@* @if (WorkOutViewModel != null)
 {
     <div class="col-12 mb-3">
         <div class="border border-secondary p-3">
@@ -14,30 +52,30 @@
                         </span>
                     </a>
                 </div>
-        </div>
-        <table class="table">
-            @if(WorkOutViewModel.SetLogs.Any())
-            {
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th>Reps</th>
-                        <th>Weight</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-            } 
-            <tbody>
-                
+            </div>
+            <table class="table">
+                @if (WorkOutViewModel.SetLogs.Any())
+                {
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Reps</th>
+                            <th>Weight</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                }
+                <tbody>
+
                     @foreach (var set in WorkOutViewModel.SetLogs)
                     {
                         <tr>
                             <td class="fw-bold">Set</td>
                             <td>
-                                <input size="4" @bind="set.Reps"  class="form-control" readonly="@set.IsReadOnly" />
+                                <input size="4" @bind="set.Reps" class="form-control" readonly="@set.IsReadOnly" />
                             </td>
                             <td>
-                            <input size="4" @bind="@set.Weight" class="form-control" readonly="@set.IsReadOnly" />
+                                <input size="4" @bind="@set.Weight" class="form-control" readonly="@set.IsReadOnly" />
                             </td>
                             <td>
                                 <a href="javascript:;" class="edit-action" @onclick="(e) => EditActionClicked(set)">
@@ -52,20 +90,16 @@
                                 </a>
                                 <a href="javascript:;" @onclick="(e) => SaveSet(set)">
                                     <span class="material-symbols-outlined">
-                                        save    
+                                        save
                                     </span>
                                 </a>
                             </td>
                         </tr>
                     }
-            </tbody>
-        </table>
-        <NotificationBanner Message="Set logged successfully" ShowNotification="@showNotification"></NotificationBanner>
-        <button class="btn-primary" @onclick="AddSet">Add Set</button>
+                </tbody>
+            </table>
+            <NotificationBanner Message="Set logged successfully" ShowNotification="@showNotification"></NotificationBanner>
+            <button class="btn-primary" @onclick="AddSet">Add Set</button>
         </div>
     </div>
-}
-
-
-
-
+} *@

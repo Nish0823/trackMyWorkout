@@ -1,0 +1,43 @@
+﻿@if (HistoryViewModel != null)
+{
+    <div class="col-12 mb-3">
+        <div class="border border-secondary p-3">
+            <div class="d-flex align-items-center">
+                <div>
+                    <h2>@HistoryViewModel.Date.ToString("dd/MM/yyyy")</h2>
+                </div>
+            </div>
+            <table class="table">
+                @if (HistoryViewModel.Log.Any())
+                {
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Reps</th>
+                            <th>Weight</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                }
+                <tbody>
+
+                    @foreach (var set in HistoryViewModel.Log)
+                    {
+                        <tr>
+                            <td class="fw-bold">Set</td>
+                            <td>
+                                <input size="4" @bind="set.Reps" class="form-control" readonly="true" />
+                            </td>
+                            <td>
+                                <input size="4" @bind="@set.Weight" class="form-control" readonly="true" />
+                            </td>
+                            <td>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+}

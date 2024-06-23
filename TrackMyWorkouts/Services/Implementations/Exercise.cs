@@ -25,10 +25,9 @@ namespace TrackMyWorkouts.Services.Implementations
 
         public async Task<ExerciseCarriedOut> CreateNewLog(int exTypeId, DateTime currentDate, string appUserId)
         {
-            var newExerciseCarriedOut = new ExerciseCarriedOut() { ExerciseDate = currentDate, ApplicationUserId = appUserId };
+            var newExerciseCarriedOut = new ExerciseCarriedOut() { ExerciseDate = currentDate, ApplicationUserId = appUserId, ExerciseTypeId = exTypeId };
             await _applicationDbContext.ExerciseCarriedOut.AddAsync(newExerciseCarriedOut);
             await _applicationDbContext.SaveChangesAsync();
-            await CreateNewExTypeCarriedOut(newExerciseCarriedOut.Id, exTypeId);
             return newExerciseCarriedOut;
         }
 
@@ -48,56 +47,34 @@ namespace TrackMyWorkouts.Services.Implementations
             return exerciseCarriedOut.SetLogs.ToList();
         }
 
-        public async Task<IEnumerable<ExerciseTypeCarriedOut>> GetUsersExercisesForThisDate(DateTime utcNow, string appUserId)
+        public async Task<IEnumerable<ExerciseCarriedOut>> GetUsersExercisesForThisDate(DateTime utcNow, string appUserId)
         {
             DateTime searchDate = utcNow.Date;
             var exercises = await _applicationDbContext.ExerciseCarriedOut
                                                 .AsNoTracking()
+                                                .Include(ex => ex.ExerciseType)
                                                 .Where(e => e.ExerciseDate == searchDate && e.ApplicationUserId == appUserId).ToListAsync();
-                                                
-            var exTypeCarriedOutList = new List<ExerciseTypeCarriedOut>();
 
-            foreach (var exercise in exercises)
-            {
-                var exTypeCarriedOut = await _applicationDbContext.ExerciseTypeCarriedOut
-                    .AsNoTracking()
-                    .Include(e => e.ExerciseType)
-                    .FirstOrDefaultAsync(e => e.ExerciseCarriedOutId == exercise.Id);
 
-                if(exTypeCarriedOut != null)
-                {
-                    exTypeCarriedOutList.Add(exTypeCarriedOut);
-                }
-            }
-            return exTypeCarriedOutList;
+            return exercises;
         }
 
-        private async Task CreateNewExTypeCarriedOut(int exCarriedoutId, int exTypeId)
-        {
-            var newExTypeCarriedOut = new ExerciseTypeCarriedOut()
-            {
-                ExerciseCarriedOutId = exCarriedoutId,
-                ExerciseTypeId = exTypeId
-            };
-
-            await _applicationDbContext.ExerciseTypeCarriedOut.AddAsync(newExTypeCarriedOut);
-            await _applicationDbContext.SaveChangesAsync();
-        }
+    
 
         public async Task<IEnumerable<WorkoutLogViewModel>> WorkoutLogViewModelsList(DateTime date, string appUserId)
         {
             List<WorkoutLogViewModel> workoutLogViewModels = new List<WorkoutLogViewModel>();
 
-            var exTypeCarriedOut = await GetUsersExercisesForThisDate(date, appUserId);
+            var exCarriedOut = await GetUsersExercisesForThisDate(date, appUserId);
 
-            foreach (var workOutLog in exTypeCarriedOut)
+            foreach (var workOutLog in exCarriedOut)
             {
                 var newVm = new WorkoutLogViewModel()
                 {
-                    ExerciseCarriedOutId = workOutLog.ExerciseCarriedOutId,
+                    ExerciseCarriedOutId = workOutLog.Id,
                     ExerciseName = workOutLog.ExerciseType.Name,
-                    ExerciseTypeId = workOutLog.ExerciseTypeId,
-                    SetLogs = await GetSetLogsViewModel(workOutLog.ExerciseCarriedOutId),
+                    ExerciseTypeId = workOutLog.ExerciseType.Id,
+                    SetLogs = await GetSetLogsViewModel(workOutLog.Id),
                 };
 
                 workoutLogViewModels.Add(newVm);
@@ -164,6 +141,27 @@ namespace TrackMyWorkouts.Services.Implementations
         private async Task<SetLog> GetSetLog(int setLogId)
         {
             return await _applicationDbContext.SetLogs.FindAsync(setLogId);
+        }
+
+        public async Task<IEnumerable<ExerciseCarriedOut>> GetUsersExerciseHistory(int exTypeId, string appUserId)
+        {
+            var exerciseCarriedOut = new List<ExerciseCarriedOut>();
+
+            var usersExercises = await _applicationDbContext.ExerciseCarriedOut
+                .AsNoTracking()
+                .Include(e => e.SetLogs)
+                .Where(e => e.ApplicationUserId == appUserId && e.ExerciseTypeId == exTypeId)
+                .OrderByDescending(e => e.ExerciseDate)
+                .ToListAsync();
+
+            return usersExercises;
+        }
+
+        public async Task DeleteExerciseOut(int exCarriedOutId)
+        {
+            var exerciseCarriedOut = await _applicationDbContext.ExerciseCarriedOut.FindAsync(exCarriedOutId);  
+            _applicationDbContext.ExerciseCarriedOut.Remove(exerciseCarriedOut);
+            await _applicationDbContext.SaveChangesAsync();
         }
     }
 }
